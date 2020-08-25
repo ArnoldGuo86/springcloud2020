@@ -1,0 +1,32 @@
+server:
+  port: 8801
+  
+spring:  application:    name: cloud-stream-provider
+    
+  cloud:    stream:      binders:  # specify rabbitmq configuration 
+        defaultRabbit: # define a bindr name which will be used in bindings 
+          type: rabbit  #message queue type
+          environment:  # rabbitmq environment configuration            spring: 
+              rabbitmq:
+                host: 192.168.0.102
+                port: 5672
+                usernam: guest
+                password: guest
+                       bindings: 
+        output: # channel name
+          destination: studyExchange  # exchange name
+          content-type: application/json
+          binder: defaultRabbit
+          
+          
+eureka:
+  instance:
+    instance-id: send-8801
+    lease-renewal-interval-in-seconds: 30 # heartbeat interval
+    lease-expiration-duration-in-seconds: 90
+    prefer-ip-address: true
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+       defaultZone: http://eureka7001.com:7001/eureka, http://eureka7002.com:7002/eureka, http://eureka7003.com:7003/eureka

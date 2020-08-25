@@ -1,0 +1,32 @@
+server:
+  port: 3355
+
+  
+spring:  application:    name: cloud-config-client
+    ####： in spring cloud bus:
+    ####:               curl -X POST "http://localhost:3344/actuator/bus-refresh/cloud-config-client:3355"
+    ####                cloud-config-client:3355 is optional
+    ####  without bus:  curl -X POST "http://localhost:3355/actuator/refresh"
+  cloud:    config:      label: master     ### git branch
+      name: config      ### config file name
+      profile: dev      ### config file suffix
+      uri:      - http://localhost:3344/
+      
+      ### the config address above should be :http://localhost:3344/master/config-dev.yml
+  rabbitmq:
+    host: 192.168.0.102
+    port: 5672
+    username: guest
+    password: guest    
+      
+management:  endpoints:    web:      exposure:        include:        - "*"
+##with out spring cloud bus, we need send post request like: curl -X POST "http://localhost:3355/actuator/refresh"     
+    
+      
+eureka:
+  instance:
+    instance-id: cloud-config-client-3355
+    prefer-ip-address: true
+  client:    register-with-eureka: true
+    fetch-registry: true
+    service-url:       defaultZone: http://eureka7001.com:7001/eureka, http://eureka7002.com:7002/eureka, http://eureka7003.com:7003/eureka
